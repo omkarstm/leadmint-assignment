@@ -297,7 +297,7 @@ function Dashboard() {
             ))}
           </div>
           <div className="flex h-100 w-full bg-white border rounded-lg p-8 bg-gray-1 ">
-            <ReactApexChart style={{ width: "100%", maxWidth: "100%" }} options={chart.options} series={chart.series} type="line" height={450} />
+            <ReactApexChart style={{ width: "100%",}} options={chart.options} series={chart.series} type="line" height={450} />
           </div>
         </div>
       </div>
