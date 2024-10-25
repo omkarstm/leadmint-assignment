@@ -8,7 +8,6 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [accountCreated, setAccountCreated] = useState(false);
 
-  // Default user credentials
   const defaultUser = {
     email: "default@example.com",
     password: "password123",
@@ -22,14 +21,12 @@ function App() {
   }, []);
 
   const handleFormSubmit = (email, password) => {
-    // Check if the user is logging in with the default credentials
     if (email === defaultUser.email && password === defaultUser.password) {
       localStorage.setItem('loggedInUser', email);
       setIsLoggedIn(true);
       return;
     }
 
-    // For non-default users, check local storage
     const storedUser = JSON.parse(localStorage.getItem(email));
     if (storedUser && storedUser.password === password) {
       localStorage.setItem('loggedInUser', email);

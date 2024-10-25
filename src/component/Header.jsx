@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import { CiSearch } from "react-icons/ci";
-import { MdNotificationsNone, MdFlag } from "react-icons/md"; // Icons for notifications and flag
+import { MdNotificationsNone, MdFlag } from "react-icons/md"; 
 
 const Header = ({ handleLogout }) => {
     const [searchQuery, setSearchQuery] = useState('');
     
     return (
-        <header className="p-4 flex items-center justify-between">
+        <header className="py-4 flex items-center justify-between w-full">
             <div className="flex items-center gap-4 w-1/2">
-                <h1 className="text-lg font-semibold">Dashboard</h1>
-                <div className="flex items-center gap-2 border rounded-full overflow-hidden h-9 w-1/2 px-4">
+                <h1 className="text-lg font-semibold hidden sm:block">Dashboard</h1>
+                <div className="flex items-center gap-2 border rounded-full overflow-hidden h-9 w-[32] px-4">
                     <input
                         type="text"
                         placeholder="Search..."
@@ -21,14 +21,12 @@ const Header = ({ handleLogout }) => {
                 </div>
             </div>
 
-            <div className="flex items-center gap-4">
-                {/* Flag Icon */}
-                <button className="p-2 rounded-full hover:bg-gray-200">
+            <div className="flex items-center gap-4 ">
+                <button className="p-2 rounded-full hover:bg-gray-200 hidden sm:block">
                     <MdFlag className="h-6 w-6 text-gray-600" />
                 </button>
                 
-                {/* Notification Icon */}
-                <button className="p-2 rounded-full hover:bg-gray-200">
+                <button className="p-2 rounded-full hover:bg-gray-200 hidden sm:block">
                     <MdNotificationsNone className="h-6 w-6 text-gray-600" />
                 </button>
 

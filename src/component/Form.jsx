@@ -4,13 +4,12 @@ import { Link } from 'react-router-dom';
 import AUTH_IMG from "../assets/auth.jpg";
 
 function AuthForm({ isSignUp, onSubmit, onAccountCreated }) {
-  const [email, setEmail] = useState('default@example.com'); // Initial value for email
-  const [password, setPassword] = useState('password123'); // Initial value for password
+  const [email, setEmail] = useState('default@example.com'); 
+  const [password, setPassword] = useState('password123'); 
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  // Reset fields when `isSignUp` changes
   useEffect(() => {
     setEmail(isSignUp ? '' : 'default@example.com');
     setPassword(isSignUp ? '' : 'password123');
@@ -56,13 +55,12 @@ function AuthForm({ isSignUp, onSubmit, onAccountCreated }) {
       setTimeout(() => {
         setIsLoading(false);
 
-        // Check if default credentials match
+
         if (email === "default@example.com" && password === "password123") {
-          onSubmit(email, password);  // No alert needed
+          onSubmit(email, password); 
           return;
         }
 
-        // Handle Sign-Up
         if (isSignUp) {
           const existingUser = localStorage.getItem(email);
           if (existingUser) {
@@ -76,7 +74,6 @@ function AuthForm({ isSignUp, onSubmit, onAccountCreated }) {
             }
           }
         } else {
-          // Handle Login with Stored Credentials
           const storedUser = localStorage.getItem(email);
           if (storedUser) {
             const user = JSON.parse(storedUser);

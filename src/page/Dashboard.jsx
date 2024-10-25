@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import ReactApexChart from "react-apexcharts";
 import Header from '../component/Header';
 import Sidebar from '../component/Sidebar';
@@ -53,7 +52,7 @@ function Dashboard() {
       grid: {
         borderColor: '#e7e7e7',
         row: {
-          colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+          colors: ['#f3f3f3', 'transparent'],
           opacity: 0.5
         },
       },
@@ -257,20 +256,20 @@ function Dashboard() {
   return (
     <div className="dashboard">
       <div className="flex flex-row sm:gap-2">
-        <div className="sm:w-full sm:max-w-[18rem]">
+        <div className="sm:w-full sm:max-w-[18rem] ">
           <input type="checkbox" id="sidebar-mobile-fixed" className="sidebar-state" />
           <label htmlFor="sidebar-mobile-fixed" className="sidebar-overlay"></label>
           <Sidebar handleLogout={handleLogout} />
         </div>
 
         <div className="flex w-full flex-col p-4">
-          <div className="w-fit">
-            <label htmlFor="sidebar-mobile-fixed" className="sm:hidden">
+          <div className=" flex items-center justify-between gap-4">
+          <label htmlFor="sidebar-mobile-fixed" className="sm:hidden">
               <CiMenuBurger />
             </label>
-          </div>
           <Header handleLogout={handleLogout} />
-          <div className="mb-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          </div>
+          <div className="mb-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 ">
             {cardData.map((card) => (
               <div
                 key={card.id}
@@ -297,7 +296,7 @@ function Dashboard() {
               </div>
             ))}
           </div>
-          <div className="flex h-100 w-full bg-white border rounded-lg p-8 bg-gray-1">
+          <div className="flex h-100 w-full bg-white border rounded-lg p-8 bg-gray-1 ">
             <ReactApexChart style={{ width: "100%", maxWidth: "100%" }} options={chart.options} series={chart.series} type="line" height={450} />
           </div>
         </div>
