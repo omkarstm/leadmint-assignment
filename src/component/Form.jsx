@@ -1,13 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaGithub, FaGoogle } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import AUTH_IMG from "../assets/auth.jpg";
 
 function AuthForm({ isSignUp, onSubmit, onAccountCreated }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('default@example.com'); // Initial value for email
+  const [password, setPassword] = useState('password123'); // Initial value for password
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Reset fields when `isSignUp` changes
+  useEffect(() => {
+    setEmail(isSignUp ? '' : 'default@example.com');
+    setPassword(isSignUp ? '' : 'password123');
+    setConfirmPassword('');
+    setErrors({});
+  }, [isSignUp]);
 
   const validateForm = () => {
     let formErrors = {};
@@ -40,43 +49,59 @@ function AuthForm({ isSignUp, onSubmit, onAccountCreated }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      if (isSignUp) {
-        const existingUser = localStorage.getItem(email);
-        if (existingUser) {
-          setErrors({ email: 'Email already exists' });
-        } else {
-          localStorage.setItem(email, JSON.stringify({ email, password }));
-          alert('Account created successfully! You can now log in.');
 
-          if (onAccountCreated) {
-            onAccountCreated();
-          }
+    if (validateForm()) {
+      setIsLoading(true);
+
+      setTimeout(() => {
+        setIsLoading(false);
+
+        // Check if default credentials match
+        if (email === "default@example.com" && password === "password123") {
+          onSubmit(email, password);  // No alert needed
+          return;
         }
-      } else {
-        const storedUser = localStorage.getItem(email);
-        if (storedUser) {
-          const user = JSON.parse(storedUser);
-          if (user.password === password) {
-            alert('Login successful!');
-            onSubmit(email, password);
+
+        // Handle Sign-Up
+        if (isSignUp) {
+          const existingUser = localStorage.getItem(email);
+          if (existingUser) {
+            setErrors({ email: 'Email already exists' });
           } else {
-            setErrors({ password: 'Invalid password' });
+            localStorage.setItem(email, JSON.stringify({ email, password }));
+            alert('Account created successfully! You can now log in.');
+
+            if (onAccountCreated) {
+              onAccountCreated();
+            }
           }
         } else {
-          setErrors({ email: 'No account found with this email' });
+          // Handle Login with Stored Credentials
+          const storedUser = localStorage.getItem(email);
+          if (storedUser) {
+            const user = JSON.parse(storedUser);
+            if (user.password === password) {
+              onSubmit(email, password);
+            } else {
+              setErrors({ password: 'Invalid password' });
+            }
+          } else {
+            setErrors({ email: 'No account found with this email' });
+          }
         }
-      }
+      }, 1500);
     }
   };
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-50 container">
-      <div className="bg-white shadow-lg rounded-lg p-8  flex  flex justify-between items-center">
-        <img src={AUTH_IMG} alt="Auth image" className='hidden lg:block w-[420px] h-[300px]' />
+      <div className="bg-white shadow-lg rounded-lg p-8 flex justify-between items-center">
+        <img src={AUTH_IMG} alt="Auth image" className="hidden lg:block w-[420px] h-[300px]" />
 
         <form>
-          <h2 className="text-2xl font-bold mb-2 text-center">{isSignUp ? 'Create an account' : 'Login to your account'}</h2>
+          <h1 className="text-2xl font-bold mb-2 text-center">
+            {isSignUp ? 'Create an account' : 'Login to your account'}
+          </h1>
           <p className="text-gray-500 mb-6 text-center">
             {isSignUp
               ? 'Enter your email below to create your account'
@@ -90,7 +115,9 @@ function AuthForm({ isSignUp, onSubmit, onAccountCreated }) {
             <input
               type="email"
               id="email"
-              className={`w-full px-3 py-2 border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-none`}
+              className={`w-full px-3 py-2 border ${
+                errors.email ? 'border-red-500' : 'border-gray-300'
+              } rounded-lg focus:outline-none focus:ring-none`}
               placeholder="m@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -105,7 +132,9 @@ function AuthForm({ isSignUp, onSubmit, onAccountCreated }) {
             <input
               type="password"
               id="password"
-              className={`w-full px-3 py-2 border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-none`}
+              className={`w-full px-3 py-2 border ${
+                errors.password ? 'border-red-500' : 'border-gray-300'
+              } rounded-lg focus:outline-none focus:ring-none`}
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -121,25 +150,38 @@ function AuthForm({ isSignUp, onSubmit, onAccountCreated }) {
               <input
                 type="password"
                 id="confirm-password"
-                className={`w-full px-3 py-2 border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-none`}
+                className={`w-full px-3 py-2 border ${
+                  errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+                } rounded-lg focus:outline-none focus:ring-none`}
                 placeholder="Confirm your password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
-              {errors.confirmPassword && <p className="text-red-500 text-xs mt-2">{errors.confirmPassword}</p>}
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-xs mt-2">{errors.confirmPassword}</p>
+              )}
             </div>
           )}
 
           <button
             onClick={handleSubmit}
-            className="w-full bg-black text-white py-2 px-4 rounded-lg font-semibold hover:bg-gray-800 mb-6"
+            className="w-full bg-black text-white h-[40px] px-4 rounded-lg font-semibold hover:bg-gray-800 mb-6 flex justify-center items-center"
+            disabled={isLoading} 
           >
-            {isSignUp ? 'Create account' : 'Login'}
+            {isLoading ? (
+              <div className="spinner-dot-pulse">
+                <div className="spinner-pulse-dot"></div>
+              </div>
+            ) : (
+              isSignUp ? 'Create account' : 'Login'
+            )}
           </button>
 
           <div className="relative text-center mb-6">
             <div className="absolute left-0 top-1/2 w-full border-t border-gray-300"></div>
-            <span className="bg-white relative px-3 text-sm text-gray-500">OR {isSignUp ? 'CONTINUE WITH' : 'SIGN IN WITH'}</span>
+            <span className="bg-white relative px-3 text-sm text-gray-500">
+              OR {isSignUp ? 'CONTINUE WITH' : 'SIGN IN WITH'}
+            </span>
           </div>
 
           <div className="flex justify-between mb-4">

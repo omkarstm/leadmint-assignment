@@ -8,3 +8,10 @@
     max-width: 1200px;
   }
 }
+.spinner-dot-pulse:after, .spinner-dot-pulse:before{
+  background-color: #FFFFFF !important;
+}
+.spinner-pulse-dot{
+  background-color: #FFFFFF !important;
+
+}

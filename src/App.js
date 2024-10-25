@@ -6,7 +6,13 @@ import "./App.css"
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [accountCreated, setAccountCreated] = useState(false); 
+  const [accountCreated, setAccountCreated] = useState(false);
+
+  // Default user credentials
+  const defaultUser = {
+    email: "default@example.com",
+    password: "password123",
+  };
 
   useEffect(() => {
     const loggedInUser = localStorage.getItem('loggedInUser');
@@ -15,20 +21,26 @@ function App() {
     }
   }, []);
 
-
   const handleFormSubmit = (email, password) => {
+    // Check if the user is logging in with the default credentials
+    if (email === defaultUser.email && password === defaultUser.password) {
+      localStorage.setItem('loggedInUser', email);
+      setIsLoggedIn(true);
+      return;
+    }
+
+    // For non-default users, check local storage
     const storedUser = JSON.parse(localStorage.getItem(email));
     if (storedUser && storedUser.password === password) {
       localStorage.setItem('loggedInUser', email);
       setIsLoggedIn(true);
     } else {
-      alert('Invalid email or password');
+      setIsLoggedIn(false);
     }
   };
 
-
   const handleAccountCreated = () => {
-    setAccountCreated(true); 
+    setAccountCreated(true);
   };
 
   return (
@@ -45,7 +57,7 @@ function App() {
             accountCreated ? (
               <Navigate to="/login" />
             ) : (
-              <AuthForm isSignUp={true} onSubmit={handleFormSubmit} onAccountCreated={handleAccountCreated} /> 
+              <AuthForm isSignUp={true} onSubmit={handleFormSubmit} onAccountCreated={handleAccountCreated} />
             )
           }
         />
@@ -54,7 +66,7 @@ function App() {
           path="/dashboard"
           element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />}
         />
-        
+
         <Route
           path="*"
           element={<Navigate to={isLoggedIn ? "/dashboard" : "/login"} />}
