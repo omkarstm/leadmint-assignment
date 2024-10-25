@@ -244,14 +244,16 @@ function Dashboard() {
     },
   ];
 
-
-
-
-
   const handleLogout = () => {
     localStorage.removeItem('loggedInUser');
     setIsLoggedOut(true);
   };
+
+  React.useEffect(() => {
+    // Trigger a resize event after a slight delay on mount
+    const resizeEvent = () => window.dispatchEvent(new Event("resize"));
+    setTimeout(resizeEvent, 100);
+ }, []);
 
   return (
     <div className="dashboard">
