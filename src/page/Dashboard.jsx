@@ -255,8 +255,8 @@ function Dashboard() {
 
   return (
     <div className="dashboard">
-      <div className="flex flex-row sm:gap-2">
-        <div className="sm:w-full sm:max-w-[18rem] ">
+      <div className="flex flex-row sm:gap-4">
+        <div className="sm:w-full sm:max-w-[12rem] md:max-w-[18rem] ">
           <input type="checkbox" id="sidebar-mobile-fixed" className="sidebar-state" />
           <label htmlFor="sidebar-mobile-fixed" className="sidebar-overlay"></label>
           <Sidebar handleLogout={handleLogout} />
