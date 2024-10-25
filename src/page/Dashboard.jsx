@@ -21,7 +21,7 @@ function Dashboard() {
     options: {
       chart: {
         height: 450,
-        width: '100%',
+        // width: '100%',
         type: 'line',
         dropShadow: {
           enabled: true,
